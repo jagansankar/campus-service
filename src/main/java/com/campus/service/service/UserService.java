@@ -39,27 +39,28 @@ public class UserService {
         return userRepository.findAll();
     }
 
+
+
     public LoginResponse login(String email, String password) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
+        System.out.println("PASSWORD MATCH = " +
+                passwordEncoder.matches(password, user.getPassword()));
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
 
-        String token = jwtService.generateToken(
-                user.getEmail(),
-                user.getRole()
-        );
+        String token = jwtService.generateToken(user.getEmail(), user.getRole());
 
         UserResponse userResponse = new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole()
+                user.getId(), user.getName(), user.getEmail(), user.getRole()
         );
 
         return new LoginResponse(token, userResponse);
     }
+
+
 }

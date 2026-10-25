@@ -58,9 +58,14 @@ public class UserController {
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
 
+        System.out.println(">>> LOGIN CONTROLLER REACHED <<<");
+
         return userService.login(
                 request.getEmail(),
                 request.getPassword()
         );
     }
+
+
+
 }
