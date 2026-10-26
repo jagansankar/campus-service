@@ -35,18 +35,31 @@ public class SecurityConfig {
                 )
 
                 .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(
-                                (request, response, authException) ->
-                                        response.sendError(
-                                                HttpServletResponse.SC_UNAUTHORIZED,
-                                                "Unauthorized"
-                                        )
-                        )
+                        exception
+                                .authenticationEntryPoint(
+                                        (request, response, authException) ->
+                                                response.sendError(
+                                                        HttpServletResponse.SC_UNAUTHORIZED,
+                                                        "Unauthorized"
+                                                )
+                                )
+                                .accessDeniedHandler(
+                                        (request, response, accessDeniedException) ->
+                                                response.sendError(
+                                                        HttpServletResponse.SC_FORBIDDEN,
+                                                        "Forbidden"
+                                                )
+                                )
                 )
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/login").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/complaints/*/assign"
+                        ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
