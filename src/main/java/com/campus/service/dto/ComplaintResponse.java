@@ -2,12 +2,13 @@ package com.campus.service.dto;
 import com.campus.service.enums.Priority;
 import java.time.LocalDateTime;
 import com.campus.service.enums.ComplaintStatus;
+import com.campus.service.enums.ComplaintCategory;
 public class ComplaintResponse {
 
     private Long id;
     private String title;
     private String description;
-    private String category;
+    private ComplaintCategory category;
     private Priority priority;
     private ComplaintStatus status;
 
@@ -23,7 +24,7 @@ public class ComplaintResponse {
             Long id,
             String title,
             String description,
-            String category,
+            ComplaintCategory category,
             Priority priority,
             ComplaintStatus status,
             Long studentId,
@@ -59,7 +60,7 @@ public class ComplaintResponse {
         return description;
     }
 
-    public String getCategory() {
+    public ComplaintCategory getCategory() {
         return category;
     }
 

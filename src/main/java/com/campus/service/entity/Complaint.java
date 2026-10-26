@@ -1,7 +1,7 @@
 package com.campus.service.entity;
 import com.campus.service.enums.Priority;
 import jakarta.persistence.*;
-
+import com.campus.service.enums.ComplaintCategory;
 import java.time.LocalDateTime;
 import com.campus.service.enums.ComplaintStatus;
 @Entity
@@ -18,8 +18,9 @@ public class Complaint {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    private ComplaintCategory category;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -68,11 +69,11 @@ public class Complaint {
         this.description = description;
     }
 
-    public String getCategory() {
+    public ComplaintCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ComplaintCategory category) {
         this.category = category;
     }
 

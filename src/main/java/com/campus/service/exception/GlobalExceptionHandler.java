@@ -34,10 +34,15 @@ public class GlobalExceptionHandler {
 
         Map<String, String> error = new HashMap<>();
 
-        error.put(
-                "error",
-                "Invalid request body. Check enum values such as priority: LOW, MEDIUM, HIGH, CRITICAL."
-        );
+        String message = ex.getMostSpecificCause().getMessage();
+
+        if (message != null && message.contains("ComplaintCategory")) {
+            error.put("category", "Invalid category. Allowed values: WIFI, EQUIPMENT, HOSTEL, ELECTRICITY, WATER, LAB, LIBRARY, TRANSPORT");
+        } else if (message != null && message.contains("Priority")) {
+            error.put("priority", "Invalid priority. Allowed values: LOW, MEDIUM, HIGH, CRITICAL");
+        } else {
+            error.put("error", "Invalid request body. Check that all enum values are valid.");
+        }
 
         return error;
     }
