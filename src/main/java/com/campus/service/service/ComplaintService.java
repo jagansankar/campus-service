@@ -6,6 +6,8 @@ import com.campus.service.repository.ComplaintRepository;
 import com.campus.service.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import com.campus.service.enums.ComplaintStatus;
+import com.campus.service.exception.InvalidStaffException;
+
 import java.util.List;
 import com.campus.service.enums.Priority;
 @Service
@@ -47,5 +49,23 @@ public class ComplaintService {
     public Complaint getComplaintById(Long id) {
         return complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));
+    }
+
+    public Complaint assignComplaint(Long complaintId, Long staffId) {
+
+        Complaint complaint = complaintRepository.findById(complaintId)
+                .orElseThrow(() -> new RuntimeException("Complaint not found"));
+
+        User staff = userRepository.findById(staffId)
+                .orElseThrow(() -> new InvalidStaffException("Staff user not found"));
+
+        if (!"STAFF".equals(staff.getRole())) {
+            throw new InvalidStaffException("User is not a staff member");
+        }
+
+        complaint.setAssignedStaff(staff);
+        complaint.setStatus(ComplaintStatus.ASSIGNED);
+
+        return complaintRepository.save(complaint);
     }
 }

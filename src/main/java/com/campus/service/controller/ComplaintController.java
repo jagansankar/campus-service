@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.campus.service.dto.CreateComplaintRequest;
 import jakarta.validation.Valid;
+import com.campus.service.dto.AssignComplaintRequest;
 
 @RestController
 @RequestMapping("/api/complaints")
@@ -47,6 +48,15 @@ public class ComplaintController {
                 savedComplaint.getStudent().getName(),
                 savedComplaint.getStudent().getEmail(),
                 savedComplaint.getStudent().getRole(),
+                savedComplaint.getAssignedStaff() == null
+                        ? null
+                        : savedComplaint.getAssignedStaff().getId(),
+                savedComplaint.getAssignedStaff() == null
+                        ? null
+                        : savedComplaint.getAssignedStaff().getName(),
+                savedComplaint.getAssignedStaff() == null
+                        ? null
+                        : savedComplaint.getAssignedStaff().getEmail(),
                 savedComplaint.getCreatedAt(),
                 savedComplaint.getUpdatedAt()
         );
@@ -67,6 +77,15 @@ public class ComplaintController {
                         complaint.getStudent().getName(),
                         complaint.getStudent().getEmail(),
                         complaint.getStudent().getRole(),
+                        complaint.getAssignedStaff() == null
+                                ? null
+                                : complaint.getAssignedStaff().getId(),
+                        complaint.getAssignedStaff() == null
+                                ? null
+                                : complaint.getAssignedStaff().getName(),
+                        complaint.getAssignedStaff() == null
+                                ? null
+                                : complaint.getAssignedStaff().getEmail(),
                         complaint.getCreatedAt(),
                         complaint.getUpdatedAt()
                 ))
@@ -89,6 +108,50 @@ public class ComplaintController {
                 complaint.getStudent().getName(),
                 complaint.getStudent().getEmail(),
                 complaint.getStudent().getRole(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getId(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getName(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getEmail(),
+                complaint.getCreatedAt(),
+                complaint.getUpdatedAt()
+        );
+    }
+
+    @PatchMapping("/{id}/assign")
+    public ComplaintResponse assignComplaint(
+            @PathVariable Long id,
+            @Valid @RequestBody AssignComplaintRequest request
+    ) {
+        Complaint complaint = complaintService.assignComplaint(
+                id,
+                request.getStaffId()
+        );
+
+        return new ComplaintResponse(
+                complaint.getId(),
+                complaint.getTitle(),
+                complaint.getDescription(),
+                complaint.getCategory(),
+                complaint.getPriority(),
+                complaint.getStatus(),
+                complaint.getStudent().getId(),
+                complaint.getStudent().getName(),
+                complaint.getStudent().getEmail(),
+                complaint.getStudent().getRole(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getId(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getName(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getEmail(),
                 complaint.getCreatedAt(),
                 complaint.getUpdatedAt()
         );

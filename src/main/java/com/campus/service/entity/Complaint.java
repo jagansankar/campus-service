@@ -34,6 +34,10 @@ public class Complaint {
     @JoinColumn(name = "student_id", nullable = false)
     private User student;
 
+    @ManyToOne
+    @JoinColumn(name = "assigned_staff_id")
+    private User assignedStaff;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -99,6 +103,14 @@ public class Complaint {
 
     public void setStudent(User student) {
         this.student = student;
+    }
+
+    public User getAssignedStaff() {
+        return assignedStaff;
+    }
+
+    public void setAssignedStaff(User assignedStaff) {
+        this.assignedStaff = assignedStaff;
     }
 
     public LocalDateTime getCreatedAt() {

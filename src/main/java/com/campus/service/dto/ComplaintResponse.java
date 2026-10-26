@@ -17,6 +17,10 @@ public class ComplaintResponse {
     private String studentEmail;
     private String studentRole;
 
+    private Long assignedStaffId;
+    private String assignedStaffName;
+    private String assignedStaffEmail;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -31,6 +35,9 @@ public class ComplaintResponse {
             String studentName,
             String studentEmail,
             String studentRole,
+            Long assignedStaffId,
+            String assignedStaffName,
+            String assignedStaffEmail,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
@@ -44,6 +51,9 @@ public class ComplaintResponse {
         this.studentName = studentName;
         this.studentEmail = studentEmail;
         this.studentRole = studentRole;
+        this.assignedStaffId = assignedStaffId;
+        this.assignedStaffName = assignedStaffName;
+        this.assignedStaffEmail = assignedStaffEmail;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -86,6 +96,18 @@ public class ComplaintResponse {
 
     public String getStudentRole() {
         return studentRole;
+    }
+
+    public Long getAssignedStaffId() {
+        return assignedStaffId;
+    }
+
+    public String getAssignedStaffName() {
+        return assignedStaffName;
+    }
+
+    public String getAssignedStaffEmail() {
+        return assignedStaffEmail;
     }
 
     public LocalDateTime getCreatedAt() {
