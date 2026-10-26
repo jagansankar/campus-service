@@ -58,4 +58,15 @@ public class GlobalExceptionHandler {
         return error;
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalStateException(
+            IllegalStateException ex) {
+
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        return error;
+    }
+
 }

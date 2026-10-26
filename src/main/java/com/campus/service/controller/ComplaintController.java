@@ -8,6 +8,7 @@ import java.util.List;
 import com.campus.service.dto.CreateComplaintRequest;
 import jakarta.validation.Valid;
 import com.campus.service.dto.AssignComplaintRequest;
+import com.campus.service.dto.UpdateComplaintStatusRequest;
 
 @RestController
 @RequestMapping("/api/complaints")
@@ -130,6 +131,42 @@ public class ComplaintController {
         Complaint complaint = complaintService.assignComplaint(
                 id,
                 request.getStaffId()
+        );
+
+        return new ComplaintResponse(
+                complaint.getId(),
+                complaint.getTitle(),
+                complaint.getDescription(),
+                complaint.getCategory(),
+                complaint.getPriority(),
+                complaint.getStatus(),
+                complaint.getStudent().getId(),
+                complaint.getStudent().getName(),
+                complaint.getStudent().getEmail(),
+                complaint.getStudent().getRole(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getId(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getName(),
+                complaint.getAssignedStaff() == null
+                        ? null
+                        : complaint.getAssignedStaff().getEmail(),
+                complaint.getCreatedAt(),
+                complaint.getUpdatedAt()
+        );
+    }
+
+
+    @PatchMapping("/{id}/status")
+    public ComplaintResponse updateComplaintStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateComplaintStatusRequest request
+    ) {
+        Complaint complaint = complaintService.updateComplaintStatus(
+                id,
+                request.getStatus()
         );
 
         return new ComplaintResponse(
