@@ -42,13 +42,49 @@ public class ComplaintService {
         return complaintRepository.save(complaint);
     }
 
-    public List<Complaint> getAllComplaints() {
-        return complaintRepository.findAll();
+    public List<Complaint> getAllComplaints(String email, String role) {
+
+        if ("ADMIN".equals(role)) {
+            return complaintRepository.findAll();
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if ("STUDENT".equals(role)) {
+            return complaintRepository.findByStudent(user);
+        }
+
+        if ("STAFF".equals(role)) {
+            return complaintRepository.findByAssignedStaff(user);
+        }
+
+        throw new RuntimeException("Invalid user role");
     }
 
-    public Complaint getComplaintById(Long id) {
-        return complaintRepository.findById(id)
+    public Complaint getComplaintById(Long id, String email, String role) {
+
+        Complaint complaint = complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));
+
+        if ("ADMIN".equals(role)) {
+            return complaint;
+        }
+
+        if ("STUDENT".equals(role)
+                && complaint.getStudent().getEmail().equals(email)) {
+            return complaint;
+        }
+
+        if ("STAFF".equals(role)
+                && complaint.getAssignedStaff() != null
+                && complaint.getAssignedStaff().getEmail().equals(email)) {
+            return complaint;
+        }
+
+        throw new org.springframework.security.access.AccessDeniedException(
+                "You are not allowed to access this complaint"
+        );
     }
 
     public Complaint assignComplaint(Long complaintId, Long staffId) {

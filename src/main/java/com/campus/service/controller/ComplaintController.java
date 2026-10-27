@@ -64,8 +64,17 @@ public class ComplaintController {
     }
 
     @GetMapping
-    public List<ComplaintResponse> getAllComplaints() {
-        return complaintService.getAllComplaints()
+    public List<ComplaintResponse> getAllComplaints(
+            Authentication authentication
+    ) {
+        return complaintService.getAllComplaints(
+                        authentication.getName(),
+                        authentication.getAuthorities()
+                                .iterator()
+                                .next()
+                                .getAuthority()
+                                .replace("ROLE_", "")
+                )
                 .stream()
                 .map(complaint -> new ComplaintResponse(
                         complaint.getId(),
@@ -94,9 +103,22 @@ public class ComplaintController {
     }
 
     @GetMapping("/{id}")
-    public ComplaintResponse getComplaintById(@PathVariable Long id) {
+    public ComplaintResponse getComplaintById(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
 
-        Complaint complaint = complaintService.getComplaintById(id);
+        String role = authentication.getAuthorities()
+                .iterator()
+                .next()
+                .getAuthority()
+                .replace("ROLE_", "");
+
+        Complaint complaint = complaintService.getComplaintById(
+                id,
+                authentication.getName(),
+                role
+        );
 
         return new ComplaintResponse(
                 complaint.getId(),

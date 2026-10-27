@@ -60,6 +60,8 @@ public class SecurityConfig {
                                 HttpMethod.PATCH,
                                 "/api/complaints/*/assign"
                         ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/complaints/*/status")
+                        .hasAnyRole("STAFF", "ADMIN")
                         .anyRequest().authenticated()
                 )
 
